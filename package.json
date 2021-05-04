@@ -20,6 +20,7 @@
     "react-native": "^0.64.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-pager-view": "^5.1.7",
+    "react-native-popup-dialog": "^0.18.3",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.1",
     "react-navigation": "^4.4.4",
