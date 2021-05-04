@@ -2,20 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {clearSignup, signup} from '../models/actions';
+import {useNavigation} from '@react-navigation/native';
 
 function Signup(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(password);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     if (props.isSignedUp === true) {
       Alert.alert('Sign Up Successfully');
+      props.clearSignUp();
+      navigation.goBack();
     } else if (props.isSignedUp === false) {
       Alert.alert('Sign Up Failed', 'The username may have already existed');
+      props.clearSignUp();
     }
-    props.clearSignUp();
-  }, [props]);
+  }, [navigation, props]);
 
   return (
     <View
