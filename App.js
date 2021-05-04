@@ -8,6 +8,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {connect} from 'react-redux';
 import Login from './src/pages/login';
 import Signup from './src/pages/signup';
+import Main from './src/pages/main';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,11 @@ const App: () => Node = () => {
             name="SIGNUP"
             component={Signup}
             options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="MAIN"
+            component={Main}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>

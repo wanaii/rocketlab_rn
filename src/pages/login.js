@@ -19,6 +19,8 @@ function Login(props) {
     if (props.isLoggedIn === false) {
       Alert.alert('User Login Failed', 'Please Try Again or Register');
       props.clearLoginStatus();
+    } else if (props.isLoggedIn === true) {
+      navigation.replace('MAIN');
     }
   }, [props, props.isLoggedIn]);
 
