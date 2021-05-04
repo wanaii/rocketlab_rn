@@ -1,13 +1,24 @@
 import {call, fork, put, takeLatest} from 'redux-saga/effects';
-import {login, loginSuccess, loginFail, loginError} from '../actions';
+import {
+  login,
+  loginSuccess,
+  loginFail,
+  loginError,
+  clearLogin,
+  clearLoginSuccess,
+} from '../actions';
 import {loginRequest} from '../requests';
 
 export default function* () {
   yield fork(watchLogin);
+  yield fork(watchClearLogin);
 }
 
 function* watchLogin() {
   yield takeLatest(login, performLogin);
+}
+function* watchClearLogin() {
+  yield takeLatest(clearLogin, performClearLogin);
 }
 
 function* performLogin(action) {
@@ -42,4 +53,8 @@ function* performLogin(action) {
       }),
     );
   }
+}
+
+function* performClearLogin(action) {
+  yield put(clearLoginSuccess());
 }

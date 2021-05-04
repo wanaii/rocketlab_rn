@@ -4,3 +4,4 @@ export const ERROR = 'ERROR';
 export const CLEAR = 'CLEAR';
 
 export const LOGIN_ACTIONS = [SUCCESS, FAIL, ERROR];
+export const CLEAR_LOGIN_ACTIONS = [SUCCESS];

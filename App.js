@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import {connect} from 'react-redux';
 import Login from './src/pages/login';
+import Signup from './src/pages/signup';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,11 @@ const App: () => Node = () => {
             component={Login}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="SIGNUP"
+            component={Signup}
+            options={{headerShown: true}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
@@ -30,9 +36,6 @@ const App: () => Node = () => {
 };
 
 const mapStateProps = state => {
-  // console.log('APP print state:');
-  // console.log(state);
-  // console.log('#################################################');
   return {};
 };
 

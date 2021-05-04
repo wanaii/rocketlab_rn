@@ -1,16 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {login} from '../models/actions';
+import {login, clearLogin} from '../models/actions';
+import {useNavigation} from '@react-navigation/native';
 
 function Login(props) {
   const [loginText, setLoginText] = useState('SIGNUP');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     setLoginText(username === '' ? 'SIGNUP' : 'LOGIN');
   }, [username]);
+
+  useEffect(() => {
+    if (props.isLoggedIn === false) {
+      Alert.alert('User Login Failed', 'Please Try Again or Register');
+      props.clearLoginStatus();
+    }
+  }, [props, props.isLoggedIn]);
 
   return (
     <View
@@ -31,7 +41,7 @@ function Login(props) {
         My Dates
       </Text>
       <View style={{flex: 1}} />
-      <TextInput
+      <View
         style={{
           width: '80%',
           height: 50,
@@ -41,26 +51,64 @@ function Login(props) {
           fontSize: 20,
           color: '#000000',
           alignItems: 'center',
-        }}
-        placeholder={'Username'}
-        onChangeText={setUsername}
-      />
-      <TextInput
+          flexDirection: 'row',
+        }}>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#00000080',
+            height: 50,
+            textAlignVertical: 'center',
+          }}>
+          name:
+        </Text>
+        <TextInput
+          style={{
+            flex: 1,
+            marginLeft: 10,
+            height: 50,
+            fontSize: 20,
+            color: '#000000',
+          }}
+          onChangeText={setUsername}
+        />
+      </View>
+
+      <View
         style={{
-          width: '80%',
-          height: 50,
-          backgroundColor: '#FFFFFF',
           marginTop: 20,
+          width: '80%',
+          height: 50,
+          backgroundColor: '#FFFFFF',
           borderRadius: 25,
           paddingHorizontal: 20,
           fontSize: 20,
           color: '#000000',
           alignItems: 'center',
-        }}
-        placeholder={'Password'}
-        secureTextEntry={true}
-        onChangeText={setPassword}
-      />
+          flexDirection: 'row',
+        }}>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#00000080',
+            height: 50,
+            textAlignVertical: 'center',
+          }}>
+          pwd:
+        </Text>
+        <TextInput
+          style={{
+            flex: 1,
+            marginLeft: 10,
+            height: 50,
+            fontSize: 20,
+            color: '#000000',
+          }}
+          secureTextEntry={true}
+          onChangeText={setPassword}
+        />
+      </View>
+
       <TouchableOpacity
         style={{
           width: '80%',
@@ -72,7 +120,11 @@ function Login(props) {
           fontSize: 20,
         }}
         onPress={() => {
-          props.pressLogin({username, password});
+          if (username !== '') {
+            props.pressLogin({username, password});
+          } else {
+            navigation.navigate('SIGNUP');
+          }
         }}>
         <Text
           style={{
@@ -103,6 +155,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     pressLogin: params => {
       dispatch(login(params));
+    },
+    clearLoginStatus: () => {
+      dispatch(clearLogin());
     },
   };
 };

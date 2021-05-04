@@ -1,10 +1,10 @@
 import {handleActions} from 'redux-actions';
 
-import {loginSuccess, loginFail, loginError} from '../actions';
+import {loginSuccess, loginFail, loginError, clearLogin} from '../actions';
 
 const defaultState = {
   username: '',
-  logged_in: false,
+  logged_in: undefined,
 };
 
 const reducer = handleActions(
@@ -28,6 +28,13 @@ const reducer = handleActions(
         ...state,
         username: '',
         logged_in: false,
+      };
+    },
+    [clearLogin](state, {payload}) {
+      return {
+        ...state,
+        username: '',
+        logged_in: undefined,
       };
     },
   },
