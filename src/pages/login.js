@@ -109,6 +109,8 @@ function Login(props) {
         />
       </View>
 
+      <View style={{flex: 1}} />
+
       <TouchableOpacity
         style={{
           width: '80%',
@@ -147,7 +149,7 @@ function Login(props) {
 const mapStateProps = state => {
   console.log(state);
   return {
-    isLoggedIn: state?.login?.logged_in,
+    isLoggedIn: state.login?.logged_in,
   };
 };
 

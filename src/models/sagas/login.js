@@ -24,9 +24,6 @@ function* watchClearLogin() {
 function* performLogin(action) {
   try {
     const res = yield call(loginRequest, action.payload);
-    console.log(res);
-    console.log(res);
-    console.log(res);
     if (res.code === 200) {
       yield put(
         loginSuccess({
