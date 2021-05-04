@@ -1,30 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {connect} from 'react-redux';
 import Login from './src/pages/login';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,9 +30,9 @@ const App: () => Node = () => {
 };
 
 const mapStateProps = state => {
-  console.log('APP print state:');
-  console.log(state);
-  console.log('#################################################');
+  // console.log('APP print state:');
+  // console.log(state);
+  // console.log('#################################################');
   return {};
 };
 

@@ -71,7 +71,9 @@ function Login(props) {
           paddingHorizontal: 20,
           fontSize: 20,
         }}
-        onPress={() => props.pressLogin(username)}>
+        onPress={() => {
+          props.pressLogin({username, password});
+        }}>
         <Text
           style={{
             fontSize: 30,
@@ -91,7 +93,10 @@ function Login(props) {
 }
 
 const mapStateProps = state => {
-  return {};
+  console.log(state);
+  return {
+    isLoggedIn: state?.login?.logged_in,
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
