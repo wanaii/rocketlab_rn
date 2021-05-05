@@ -72,7 +72,6 @@ function Main(props) {
       } else if (opt === 'Priority Down') {
         setEventList(eventList.sort((a, b) => b.priority - a.priority));
       }
-      console.log(eventList);
     },
     [eventList],
   );

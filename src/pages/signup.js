@@ -115,11 +115,10 @@ function Signup(props) {
           fontSize: 20,
         }}
         onPress={() => {
-          if (password !== confirmPassword) {
-            Alert.alert(
-              'Password Not Confirmed',
-              'Please Check Values Assigned',
-            );
+          if (username.length === 0) {
+            Alert.alert('Username can not be empty');
+          } else if (password !== confirmPassword) {
+            Alert.alert('Password mismatched', 'Please check values assigned');
           } else {
             props.onSignUp({
               username,
@@ -137,7 +136,7 @@ function Signup(props) {
             textAlignVertical: 'center',
             color: '#FFFFFF',
           }}>
-          SIGN ME UP !
+          SIGN ME UP
         </Text>
       </TouchableOpacity>
 
