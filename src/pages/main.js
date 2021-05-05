@@ -159,71 +159,108 @@ function Main(props) {
           On Going
         </Text>
       </View>
-      <ScrollView
-        style={{
-          flex: 1,
-          width: '100%',
-        }}>
-        {eventList.length > 0 &&
-          eventList.map((item, index) => {
-            return (
-              <DateItem
-                key={index}
-                completed={item.completed}
-                title={item.title}
-                priority={item.priority}
-                deadline={item.deadline}
-                onEdit={onEdit}
-                onClickComplete={() => {
-                  Alert.alert('Completed');
-                  let newEventList = [];
-                  eventList.length > 0 &&
-                    eventList.forEach((item, subIndex) => {
-                      newEventList.push(
-                        subIndex === index ? {...item, completed: true} : item,
-                      );
-                    });
-                  setEventList(newEventList);
-                }}
-                onClickDelete={() => {
-                  Alert.alert('Deleted');
-                  let newEventList = [];
-                  eventList.length > 0 &&
-                    eventList.forEach((item, subIndex) => {
-                      if (subIndex !== index) {
-                        newEventList.push(item);
-                      }
-                    });
-                  setEventList(newEventList);
-                }}
-                onSetPriority={newPriority => {
-                  let newEventList = [];
-                  eventList.length > 0 &&
-                    eventList.forEach((item, subIndex) => {
-                      newEventList.push(
-                        subIndex === index
-                          ? {...item, priority: newPriority}
-                          : item,
-                      );
-                    });
-                  setEventList(newEventList);
-                }}
-                onSetDateTime={newDateTime => {
-                  let newEventList = [];
-                  eventList.length > 0 &&
-                    eventList.forEach((item, subIndex) => {
-                      newEventList.push(
-                        subIndex === index
-                          ? {...item, deadline: newDateTime}
-                          : item,
-                      );
-                    });
-                  setEventList(newEventList);
-                }}
-              />
-            );
-          })}
-      </ScrollView>
+      {eventList.length > 0 && (
+        <ScrollView
+          style={{
+            flex: 1,
+            width: '100%',
+          }}>
+          {eventList.length > 0 &&
+            eventList.map((item, index) => {
+              return (
+                <DateItem
+                  key={index}
+                  completed={item.completed}
+                  title={item.title}
+                  priority={item.priority}
+                  deadline={item.deadline}
+                  onEdit={onEdit}
+                  onClickComplete={() => {
+                    Alert.alert('Completed');
+                    let newEventList = [];
+                    eventList.length > 0 &&
+                      eventList.forEach((item, subIndex) => {
+                        newEventList.push(
+                          subIndex === index
+                            ? {...item, completed: true}
+                            : item,
+                        );
+                      });
+                    setEventList(newEventList);
+                  }}
+                  onClickDelete={() => {
+                    Alert.alert('Deleted');
+                    let newEventList = [];
+                    eventList.length > 0 &&
+                      eventList.forEach((item, subIndex) => {
+                        if (subIndex !== index) {
+                          newEventList.push(item);
+                        }
+                      });
+                    setEventList(newEventList);
+                  }}
+                  onSetPriority={newPriority => {
+                    let newEventList = [];
+                    eventList.length > 0 &&
+                      eventList.forEach((item, subIndex) => {
+                        newEventList.push(
+                          subIndex === index
+                            ? {...item, priority: newPriority}
+                            : item,
+                        );
+                      });
+                    setEventList(newEventList);
+                  }}
+                  onSetDateTime={newDateTime => {
+                    let newEventList = [];
+                    eventList.length > 0 &&
+                      eventList.forEach((item, subIndex) => {
+                        newEventList.push(
+                          subIndex === index
+                            ? {...item, deadline: newDateTime}
+                            : item,
+                        );
+                      });
+                    setEventList(newEventList);
+                  }}
+                />
+              );
+            })}
+          {eventList.length > 0 && (
+            <View
+              style={{
+                height: 10,
+              }}
+            />
+          )}
+        </ScrollView>
+      )}
+      {eventList.length === 0 && (
+        <View
+          style={{
+            flex: 1,
+            width: '100%',
+          }}>
+          <View style={{flex: 1}} />
+          <View
+            style={{
+              flexDirection: 'column',
+              paddingVertical: 20,
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#FFFFFF',
+                marginBottom: 20,
+              }}>
+              Add your first item here ..
+            </Text>
+            <Feather name={'corner-left-down'} size={50} color={'#FFFFFF'} />
+          </View>
+        </View>
+      )}
+
       <View
         style={{
           height: 70,
@@ -527,7 +564,7 @@ function Main(props) {
               paddingHorizontal: 20,
             }}
             onPress={() => {
-              if (addTitle.length > 0 && addPriority > 0 && addPriority < 10) {
+              if (addTitle.length > 0 && addPriority >= 0 && addPriority < 10) {
                 let newEventList = [
                   {
                     title: addTitle,
@@ -544,7 +581,7 @@ function Main(props) {
                 setOnAdd(false);
               } else if (addTitle.length == 0) {
                 Alert.alert('Can not add an empty-titled item');
-              } else if (addPriority <= 0 || addPriority >= 10) {
+              } else if (addPriority < 0 || addPriority >= 10) {
                 Alert.alert(
                   'Not a valid priority value (0-9)',
                   'You set: ' + addPriority.toString(),
