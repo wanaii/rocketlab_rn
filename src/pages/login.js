@@ -5,14 +5,14 @@ import {login, clearLogin} from '../models/actions';
 import {useNavigation} from '@react-navigation/native';
 
 function Login(props) {
-  const [loginText, setLoginText] = useState('SIGNUP');
+  const [loginText, setLoginText] = useState('SIGN ME UP');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    setLoginText(username === '' ? 'SIGNUP' : 'LOGIN');
+    setLoginText(username === '' ? 'SIGN ME UP' : 'LOGIN');
   }, [username]);
 
   useEffect(() => {
