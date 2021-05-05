@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -28,26 +28,26 @@ function Main(props) {
   // testing data
   const [eventList, setEventList] = useState([
     {
-      title: 'My first event',
-      priority: 6,
+      title: 'CCCC',
+      priority: 1,
       deadline: new Date().getTime(),
       completed: false,
     },
     {
-      title: 'LMAO',
-      priority: 7,
-      deadline: new Date().getTime(),
-      completed: false,
-    },
-    {
-      title: 'Eating out',
+      title: 'AAAA',
       priority: 2,
       deadline: new Date().getTime(),
       completed: false,
     },
     {
-      title: 'Course assignment',
-      priority: 9,
+      title: 'DDDD',
+      priority: 3,
+      deadline: new Date().getTime(),
+      completed: false,
+    },
+    {
+      title: 'BBBB',
+      priority: 4,
       deadline: new Date().getTime(),
       completed: true,
     },
@@ -67,6 +67,22 @@ function Main(props) {
       });
     setComplete(tempComplete);
   }, [eventList]);
+
+  const resortEvents = useCallback(
+    opt => {
+      if (opt === 'A-Z') {
+        setEventList(eventList.sort((a, b) => (a.title > b.title ? 1 : -1)));
+      } else if (opt === 'Z-A') {
+        setEventList(eventList.sort((a, b) => (a.title < b.title ? 1 : -1)));
+      } else if (opt === 'Priority Up') {
+        setEventList(eventList.sort((a, b) => a.priority - b.priority));
+      } else if (opt === 'Priority Down') {
+        setEventList(eventList.sort((a, b) => b.priority - a.priority));
+      }
+      console.log(eventList);
+    },
+    [eventList],
+  );
 
   return (
     <View
@@ -288,6 +304,7 @@ function Main(props) {
             <TouchableOpacity
               onPress={() => {
                 setSortPolicy('Priority Up');
+                resortEvents('Priority Up');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -307,6 +324,7 @@ function Main(props) {
             <TouchableOpacity
               onPress={() => {
                 setSortPolicy('Priority Down');
+                resortEvents('Priority Down');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -325,7 +343,8 @@ function Main(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setSortPolicy('Name Up');
+                setSortPolicy('A-Z');
+                resortEvents('A-Z');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -339,12 +358,13 @@ function Main(props) {
                   borderTopWidth: 1,
                   borderColor: '#00000060',
                 }}>
-                Name Up
+                A-Z
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setSortPolicy('Name Down');
+                setSortPolicy('Z-A');
+                resortEvents('Z-A');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -358,7 +378,7 @@ function Main(props) {
                   borderTopWidth: 1,
                   borderColor: '#00000060',
                 }}>
-                Name Down
+                Z-A
               </Text>
             </TouchableOpacity>
           </ScrollView>

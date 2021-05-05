@@ -8,6 +8,14 @@ export default function DateItem(props) {
   const [deadline, setDeadline] = useState(props.deadline);
   const [openDateTimePicker, setOpenDateTimePicker] = useState(false);
 
+  useEffect(() => {
+    setPriority(props.priority);
+  }, [props.priority]);
+
+  useEffect(() => {
+    setDeadline(props.deadline);
+  }, [props.deadline]);
+
   return (
     <View
       style={{
