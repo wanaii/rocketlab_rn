@@ -48,7 +48,7 @@ export default function DateItem(props) {
             {props.title}
           </Text>
         )}
-        {props.priority && (
+        {props.priority !== undefined && (
           <View
             style={{
               flexDirection: 'row',

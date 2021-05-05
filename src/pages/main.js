@@ -90,7 +90,7 @@ function Main(props) {
         style={{
           height: 50,
           width: '100%',
-          backgroundColor: '#D3D3D3',
+          backgroundColor: '#FFFFFF',
           paddingHorizontal: 20,
           flexDirection: 'row',
           alignItems: 'center',
@@ -157,7 +157,7 @@ function Main(props) {
             textAlign: 'center',
             textAlignVertical: 'center',
           }}>
-          Pending
+          On Going
         </Text>
       </View>
       <ScrollView
@@ -268,7 +268,12 @@ function Main(props) {
             borderColor: '#00000040',
           }}
           disabled={onEdit}
-          onPress={() => setOnAdd(true)}>
+          onPress={() => {
+            setAddTitle('');
+            setAddPriority(-1);
+            setAddDDL(new Date().getTime());
+            setOnAdd(true);
+          }}>
           <AntDesign
             name={'plus'}
             size={35}
@@ -523,20 +528,29 @@ function Main(props) {
               paddingHorizontal: 20,
             }}
             onPress={() => {
-              let newEventList = [
-                {
-                  title: addTitle,
-                  priority: addPriority,
-                  deadline: addDDL,
-                  completed: false,
-                },
-              ];
-              eventList.length > 0 &&
-                eventList.forEach((item, subIndex) => {
-                  newEventList.push(item);
-                });
-              setEventList(newEventList);
-              setOnAdd(false);
+              if (addTitle.length > 0 && addPriority > 0 && addPriority < 10) {
+                let newEventList = [
+                  {
+                    title: addTitle,
+                    priority: addPriority,
+                    deadline: addDDL,
+                    completed: false,
+                  },
+                ];
+                eventList.length > 0 &&
+                  eventList.forEach((item, subIndex) => {
+                    newEventList.push(item);
+                  });
+                setEventList(newEventList);
+                setOnAdd(false);
+              } else if (addTitle.length == 0) {
+                Alert.alert('Can not add empty-titled item');
+              } else if (addPriority <= 0 || addPriority >= 10) {
+                Alert.alert(
+                  'Not a valid priority value (0-9)',
+                  'You set: ' + addPriority.toString(),
+                );
+              }
             }}>
             <Text
               style={{
@@ -549,6 +563,29 @@ function Main(props) {
                 fontSize: 20,
               }}>
               ADD TO MY DATES
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#FF0D0D',
+              width: '90%',
+              borderRadius: 20,
+              paddingHorizontal: 20,
+              marginTop: 10,
+            }}
+            onPress={() => {
+              setOnAdd(false);
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                height: 40,
+                fontWeight: 'bold',
+                color: '#FFFFFF',
+                textAlignVertical: 'center',
+                textAlign: 'center',
+              }}>
+              CANCEL
             </Text>
           </TouchableOpacity>
           <View style={{flex: 1}} />
@@ -571,7 +608,7 @@ function Main(props) {
 }
 
 const mapStateProps = state => {
-  console.log(state);
+  // console.log(state);
   return {
     username: state.login?.username,
     userdata: state.db_storage?.userdata,

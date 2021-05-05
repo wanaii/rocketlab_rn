@@ -150,7 +150,7 @@ function Login(props) {
 }
 
 const mapStateProps = state => {
-  console.log(state);
+  // console.log(state);
   return {
     isLoggedIn: state.login?.logged_in,
   };
