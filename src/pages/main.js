@@ -267,12 +267,17 @@ function Main(props) {
             borderRightWidth: 2,
             borderColor: '#00000040',
           }}
+          disabled={onEdit}
           onPress={() => setOnAdd(true)}>
-          <AntDesign name={'plus'} size={35} color={'#000000'} />
+          <AntDesign
+            name={'plus'}
+            size={35}
+            color={onEdit ? '#00000050' : '#000000'}
+          />
           <Text
             style={{
               fontSize: 12,
-              color: '#000000',
+              color: onEdit ? '#00000050' : '#000000',
             }}>
             Add New
           </Text>
@@ -284,6 +289,7 @@ function Main(props) {
             flexDirection: 'column',
             alignItems: 'center',
           }}
+          disabled={onEdit}
           onPress={() => {
             props.saveUserData({
               username: props.username,
@@ -293,11 +299,15 @@ function Main(props) {
             Alert.alert('Logged Out Successfully !');
             navigation.replace('LOGIN');
           }}>
-          <Feather name={'user-x'} size={35} color={'#000000'} />
+          <Feather
+            name={'user-x'}
+            size={35}
+            color={onEdit ? '#00000050' : '#000000'}
+          />
           <Text
             style={{
               fontSize: 12,
-              color: '#000000',
+              color: onEdit ? '#00000050' : '#000000',
             }}>
             Log out
           </Text>
