@@ -66,6 +66,7 @@ export default function DateItem(props) {
                 onPress={() => {
                   if (priority < 9) {
                     setPriority(priority + 1);
+                    props.onSetPriority(priority + 1);
                   }
                 }}>
                 <AntDesign
@@ -89,6 +90,7 @@ export default function DateItem(props) {
                 onPress={() => {
                   if (priority > 0) {
                     setPriority(priority - 1);
+                    props.onSetPriority(priority - 1);
                   }
                 }}>
                 <AntDesign
@@ -159,6 +161,7 @@ export default function DateItem(props) {
         date={new Date(deadline)}
         onConfirm={datetime => {
           setDeadline(datetime.getTime());
+          props.onSetDateTime(datetime.getTime());
           setOpenDateTimePicker(false);
         }}
         onCancel={() => {

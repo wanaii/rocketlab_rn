@@ -16,6 +16,8 @@ import Dialog from 'react-native-popup-dialog';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import DateItem from '../components/dateItem';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {parse} from '@babel/core';
 
 function Main(props) {
   const navigation = useNavigation();
@@ -24,6 +26,12 @@ function Main(props) {
   const [total, setTotal] = useState(0);
   const [complete, setComplete] = useState(0);
   const [onEdit, setOnEdit] = useState(false);
+
+  const [onAdd, setOnAdd] = useState(false);
+  const [addTitle, setAddTitle] = useState('');
+  const [addPriority, setAddPriority] = useState(0);
+  const [addDDL, setAddDDL] = useState(new Date().getTime());
+  const [openAddDateTimePicker, setOpenAddDateTimePicker] = useState(false);
 
   // testing data
   const [eventList, setEventList] = useState([
@@ -204,6 +212,30 @@ function Main(props) {
                     });
                   setEventList(newEventList);
                 }}
+                onSetPriority={newPriority => {
+                  let newEventList = [];
+                  eventList.length > 0 &&
+                    eventList.forEach((item, subIndex) => {
+                      newEventList.push(
+                        subIndex === index
+                          ? {...item, priority: newPriority}
+                          : item,
+                      );
+                    });
+                  setEventList(newEventList);
+                }}
+                onSetDateTime={newDateTime => {
+                  let newEventList = [];
+                  eventList.length > 0 &&
+                    eventList.forEach((item, subIndex) => {
+                      newEventList.push(
+                        subIndex === index
+                          ? {...item, deadline: newDateTime}
+                          : item,
+                      );
+                    });
+                  setEventList(newEventList);
+                }}
               />
             );
           })}
@@ -241,7 +273,8 @@ function Main(props) {
             borderLeftWidth: 2,
             borderRightWidth: 2,
             borderColor: '#00000040',
-          }}>
+          }}
+          onPress={() => setOnAdd(true)}>
           <AntDesign name={'plus'} size={35} color={'#000000'} />
           <Text
             style={{
@@ -382,6 +415,151 @@ function Main(props) {
               </Text>
             </TouchableOpacity>
           </ScrollView>
+        </View>
+      </Dialog>
+      <Dialog visible={onAdd}>
+        <View
+          style={{
+            width: pageWidth * 0.8,
+            height: pageHeight * 0.6,
+            backgroundColor: '#FFFFFF',
+            borderRadius: 5,
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 20,
+          }}>
+          <Text
+            style={{
+              color: '#000000',
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginBottom: 40,
+            }}>
+            Add a New Event
+          </Text>
+          <Text
+            style={{
+              color: '#000000',
+              fontSize: 15,
+              width: '80%',
+              marginBottom: 5,
+            }}>
+            Type a title here:
+          </Text>
+          <TextInput
+            style={{
+              width: '90%',
+              height: 40,
+              color: '#000000',
+              backgroundColor: '#D3D3D3',
+              borderRadius: 20,
+              marginBottom: 10,
+              paddingHorizontal: 20,
+            }}
+            onChangeText={setAddTitle}
+          />
+          <Text
+            style={{
+              color: '#000000',
+              fontSize: 15,
+              width: '80%',
+              marginBottom: 5,
+            }}>
+            Type a priority here (0-9):
+          </Text>
+          <TextInput
+            style={{
+              width: '90%',
+              height: 40,
+              color: '#000000',
+              backgroundColor: '#D3D3D3',
+              borderRadius: 20,
+              marginBottom: 10,
+              paddingHorizontal: 20,
+            }}
+            keyboardType={'numeric'}
+            onChangeText={text => setAddPriority(parseInt(text))}
+          />
+          <Text
+            style={{
+              color: '#000000',
+              fontSize: 15,
+              width: '80%',
+              marginBottom: 5,
+            }}>
+            Pick a deadline:
+          </Text>
+          <TouchableOpacity
+            style={{
+              width: '90%',
+              backgroundColor: '#D3D3D3',
+              borderRadius: 20,
+              marginBottom: 10,
+              paddingHorizontal: 20,
+            }}
+            onPress={() => {
+              setOpenAddDateTimePicker(true);
+            }}>
+            <Text
+              style={{
+                height: 40,
+                color: '#000000',
+                textAlignVertical: 'center',
+              }}>
+              {new Date(addDDL).toLocaleDateString()}{' '}
+              {new Date(addDDL).toLocaleTimeString()}
+            </Text>
+          </TouchableOpacity>
+          <View style={{flex: 1}} />
+          <TouchableOpacity
+            style={{
+              width: '90%',
+              backgroundColor: '#1663BE',
+              borderRadius: 20,
+              paddingHorizontal: 20,
+            }}
+            onPress={() => {
+              let newEventList = [
+                {
+                  title: addTitle,
+                  priority: addPriority,
+                  deadline: addDDL,
+                  completed: false,
+                },
+              ];
+              eventList.length > 0 &&
+                eventList.forEach((item, subIndex) => {
+                  newEventList.push(item);
+                });
+              setEventList(newEventList);
+              setOnAdd(false);
+            }}>
+            <Text
+              style={{
+                width: '100%',
+                height: 40,
+                color: '#FFFFFF',
+                fontWeight: 'bold',
+                textAlignVertical: 'center',
+                textAlign: 'center',
+                fontSize: 20,
+              }}>
+              ADD TO MY DATES
+            </Text>
+          </TouchableOpacity>
+          <View style={{flex: 1}} />
+          <DateTimePickerModal
+            isVisible={openAddDateTimePicker}
+            mode={'datetime'}
+            date={new Date(addDDL)}
+            onConfirm={datetime => {
+              setAddDDL(datetime.getTime());
+              setOpenAddDateTimePicker(false);
+            }}
+            onCancel={() => {
+              setOpenAddDateTimePicker(false);
+            }}
+          />
         </View>
       </Dialog>
     </View>
