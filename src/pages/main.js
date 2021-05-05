@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -25,8 +25,48 @@ function Main(props) {
   const [complete, setComplete] = useState(0);
   const [onEdit, setOnEdit] = useState(false);
 
+  // testing data
+  const [eventList, setEventList] = useState([
+    {
+      title: 'My first event',
+      priority: 6,
+      deadline: new Date().getTime(),
+      completed: false,
+    },
+    {
+      title: 'LMAO',
+      priority: 7,
+      deadline: new Date().getTime(),
+      completed: false,
+    },
+    {
+      title: 'Eating out',
+      priority: 2,
+      deadline: new Date().getTime(),
+      completed: false,
+    },
+    {
+      title: 'Course assignment',
+      priority: 9,
+      deadline: new Date().getTime(),
+      completed: true,
+    },
+  ]);
+
   const pageWidth = Dimensions.get('window').width;
   const pageHeight = Dimensions.get('window').height;
+
+  useEffect(() => {
+    setTotal(eventList.length);
+    let tempComplete = 0;
+    eventList &&
+      eventList.forEach(item => {
+        if (item.completed) {
+          tempComplete += 1;
+        }
+      });
+    setComplete(tempComplete);
+  }, [eventList]);
 
   return (
     <View
@@ -70,25 +110,87 @@ function Main(props) {
           completed: {complete}
         </Text>
       </View>
+      <View
+        style={{
+          width: '100%',
+          height: 30,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            flex: 1,
+            height: 30,
+            backgroundColor: '#2CFA1F',
+            color: '#000000',
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>
+          Completed
+        </Text>
+        <Text
+          style={{
+            flex: 1,
+            height: 30,
+            backgroundColor: '#FFCC00',
+            color: '#000000',
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>
+          Overdue
+        </Text>
+        <Text
+          style={{
+            flex: 1,
+            height: 30,
+            backgroundColor: '#E13026',
+            color: '#000000',
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>
+          Pending
+        </Text>
+      </View>
       <ScrollView
         style={{
           flex: 1,
           width: '100%',
         }}>
-        <DateItem
-          completed={false}
-          itemName={'123'}
-          priority={9}
-          itemDateTime={'31-05-2021 21:00'}
-          onEdit={onEdit}
-        />
-        <DateItem
-          completed={true}
-          itemName={'123'}
-          priority={9}
-          itemDateTime={'31-05-2021 21:00'}
-          onEdit={onEdit}
-        />
+        {eventList.length > 0 &&
+          eventList.map((item, index) => {
+            return (
+              <DateItem
+                key={index}
+                completed={item.completed}
+                title={item.title}
+                priority={item.priority}
+                deadline={item.deadline}
+                onEdit={onEdit}
+                onClickComplete={() => {
+                  Alert.alert('Completed');
+                  let newEventList = [];
+                  eventList.length > 0 &&
+                    eventList.forEach((item, subIndex) => {
+                      newEventList.push(
+                        subIndex === index ? {...item, completed: true} : item,
+                      );
+                    });
+                  setEventList(newEventList);
+                }}
+                onClickDelete={() => {
+                  Alert.alert('Deleted');
+                  let newEventList = [];
+                  eventList.length > 0 &&
+                    eventList.forEach((item, subIndex) => {
+                      if (subIndex !== index) {
+                        newEventList.push(item);
+                      }
+                    });
+                  setEventList(newEventList);
+                }}
+              />
+            );
+          })}
       </ScrollView>
       <View
         style={{
@@ -140,7 +242,10 @@ function Main(props) {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-          onPress={() => setOnEdit(!onEdit)}>
+          onPress={() => {
+            setOnEdit(!onEdit);
+            setSortPolicy('Sorted By');
+          }}>
           <AntDesign
             name={'edit'}
             size={35}
@@ -151,7 +256,7 @@ function Main(props) {
               fontSize: 12,
               color: onEdit ? '#FF0D0D' : '#000000',
             }}>
-            Edit
+            {onEdit ? 'Confirm' : 'Edit'}
           </Text>
         </TouchableOpacity>
       </View>

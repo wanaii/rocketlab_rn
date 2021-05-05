@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function DateItem(props) {
+  const [priority, setPriority] = useState(props.priority);
+  const [deadline, setDeadline] = useState(props.deadline);
+  const [openDateTimePicker, setOpenDateTimePicker] = useState(false);
+
   return (
     <View
       style={{
@@ -10,7 +15,13 @@ export default function DateItem(props) {
         marginTop: 10,
         paddingHorizontal: 20,
         paddingVertical: 10,
-        backgroundColor: props.completed ? '#CDFFCC' : '#F6BDC0',
+        backgroundColor: '#FFFFFF',
+        borderLeftColor: props.completed
+          ? '#2CFA1F'
+          : new Date().getTime() > deadline && !props.completed
+          ? '#FFCC00'
+          : '#E13026',
+        borderLeftWidth: 10,
         borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center',
@@ -20,32 +31,80 @@ export default function DateItem(props) {
           flex: 1,
           width: '60%',
         }}>
-        {props.itemName && (
+        {props.title && (
           <Text
             style={{
               color: '#000000',
               fontSize: 18,
             }}>
-            {props.itemName}
+            {props.title}
           </Text>
         )}
         {props.priority && (
-          <Text
+          <View
             style={{
-              color: '#000000',
-              fontSize: 13,
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            Priority: {props.priority}
-          </Text>
+            <Text
+              style={{
+                color: props.onEdit ? '#FF0D0D' : '#000000',
+                fontSize: props.onEdit ? 15 : 13,
+              }}>
+              Priority:{' '}
+            </Text>
+            {props.onEdit && (
+              <TouchableOpacity
+                onPress={() => {
+                  if (priority < 9) {
+                    setPriority(priority + 1);
+                  }
+                }}>
+                <AntDesign
+                  name={'pluscircle'}
+                  size={20}
+                  color={priority === 9 ? '#9A9A9A' : '#69B34C'}
+                />
+              </TouchableOpacity>
+            )}
+            <Text
+              style={{
+                color: props.onEdit ? '#FF0D0D' : '#000000',
+                fontSize: props.onEdit ? 18 : 13,
+                fontWeight: props.onEdit ? 'bold' : 'normal',
+                marginHorizontal: props.onEdit ? 10 : 0,
+              }}>
+              {priority}
+            </Text>
+            {props.onEdit && (
+              <TouchableOpacity
+                onPress={() => {
+                  if (priority > 0) {
+                    setPriority(priority - 1);
+                  }
+                }}>
+                <AntDesign
+                  name={'minuscircle'}
+                  size={20}
+                  color={priority === 0 ? '#9A9A9A' : '#FF0D0D'}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         )}
-        {props.itemDateTime && (
-          <Text
-            style={{
-              color: '#000000',
-              fontSize: 13,
-            }}>
-            Deadline: {props.itemDateTime}
-          </Text>
+        {props.deadline && (
+          <TouchableOpacity
+            disabled={!props.onEdit}
+            onPress={() => setOpenDateTimePicker(true)}>
+            <Text
+              style={{
+                color: props.onEdit ? '#FF0D0D' : '#000000',
+                fontSize: props.onEdit ? 15 : 13,
+              }}>
+              Deadline: {new Date(deadline).toLocaleDateString()}{' '}
+              {new Date(deadline).toLocaleTimeString()}
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
 
@@ -61,11 +120,12 @@ export default function DateItem(props) {
                 backgroundColor: '#69B34C',
                 height: 40,
                 width: 40,
-                borderRadius: 5,
+                borderRadius: 10,
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-              }}>
+              }}
+              onPress={props.onClickComplete}>
               <AntDesign name={'check'} size={25} color={'#FFFFFF'} />
             </TouchableOpacity>
           )}
@@ -77,13 +137,26 @@ export default function DateItem(props) {
               width: 40,
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 5,
+              borderRadius: 10,
               marginLeft: 10,
-            }}>
+            }}
+            onPress={props.onClickDelete}>
             <AntDesign name={'close'} size={25} color={'#FFFFFF'} />
           </TouchableOpacity>
         </View>
       )}
+      <DateTimePickerModal
+        isVisible={openDateTimePicker}
+        mode={'datetime'}
+        date={new Date(deadline)}
+        onConfirm={datetime => {
+          setDeadline(datetime.getTime());
+          setOpenDateTimePicker(false);
+        }}
+        onCancel={() => {
+          setOpenDateTimePicker(false);
+        }}
+      />
     </View>
   );
 }
