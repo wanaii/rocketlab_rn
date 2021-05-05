@@ -17,7 +17,7 @@ import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import DateItem from '../components/dateItem';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {parse} from '@babel/core';
+import {clearLogin, restore, save} from '../models/actions';
 
 function Main(props) {
   const navigation = useNavigation();
@@ -34,35 +34,20 @@ function Main(props) {
   const [openAddDateTimePicker, setOpenAddDateTimePicker] = useState(false);
 
   // testing data
-  const [eventList, setEventList] = useState([
-    {
-      title: 'CCCC',
-      priority: 1,
-      deadline: new Date().getTime(),
-      completed: false,
-    },
-    {
-      title: 'AAAA',
-      priority: 2,
-      deadline: new Date().getTime(),
-      completed: false,
-    },
-    {
-      title: 'DDDD',
-      priority: 3,
-      deadline: new Date().getTime(),
-      completed: false,
-    },
-    {
-      title: 'BBBB',
-      priority: 4,
-      deadline: new Date().getTime(),
-      completed: true,
-    },
-  ]);
+  const [eventList, setEventList] = useState([]);
 
   const pageWidth = Dimensions.get('window').width;
   const pageHeight = Dimensions.get('window').height;
+
+  useEffect(() => {
+    props.restoreUserData({
+      username: props.username,
+    });
+  }, [props.username]);
+
+  useEffect(() => {
+    setEventList(props.userdata);
+  }, [props.userdata]);
 
   useEffect(() => {
     setTotal(eventList.length);
@@ -248,42 +233,6 @@ function Main(props) {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        {/*dates list*/}
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}>
-          <AntDesign name={'calendar'} size={35} color={'#000000'} />
-          <Text
-            style={{
-              fontSize: 12,
-              color: '#000000',
-            }}>
-            My Dates
-          </Text>
-        </TouchableOpacity>
-        {/*add new item*/}
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'center',
-            borderLeftWidth: 2,
-            borderRightWidth: 2,
-            borderColor: '#00000040',
-          }}
-          onPress={() => setOnAdd(true)}>
-          <AntDesign name={'plus'} size={35} color={'#000000'} />
-          <Text
-            style={{
-              fontSize: 12,
-              color: '#000000',
-            }}>
-            Add New
-          </Text>
-        </TouchableOpacity>
         {/*Edit items*/}
         <TouchableOpacity
           style={{
@@ -306,6 +255,51 @@ function Main(props) {
               color: onEdit ? '#FF0D0D' : '#000000',
             }}>
             {onEdit ? 'Confirm' : 'Edit'}
+          </Text>
+        </TouchableOpacity>
+        {/*add new item*/}
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            borderLeftWidth: 2,
+            borderRightWidth: 2,
+            borderColor: '#00000040',
+          }}
+          onPress={() => setOnAdd(true)}>
+          <AntDesign name={'plus'} size={35} color={'#000000'} />
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#000000',
+            }}>
+            Add New
+          </Text>
+        </TouchableOpacity>
+        {/*log out*/}
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+          onPress={() => {
+            props.saveUserData({
+              username: props.username,
+              userdata: eventList,
+            });
+            props.clearLoginStatus();
+            Alert.alert('Logged Out Successfully !');
+            navigation.replace('LOGIN');
+          }}>
+          <Feather name={'user-x'} size={35} color={'#000000'} />
+          <Text
+            style={{
+              fontSize: 12,
+              color: '#000000',
+            }}>
+            Log out
           </Text>
         </TouchableOpacity>
       </View>
@@ -568,11 +562,24 @@ function Main(props) {
 
 const mapStateProps = state => {
   console.log(state);
-  return {};
+  return {
+    username: state.login?.username,
+    userdata: state.db_storage?.userdata,
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {};
+  return {
+    clearLoginStatus: () => {
+      dispatch(clearLogin());
+    },
+    saveUserData: params => {
+      dispatch(save(params));
+    },
+    restoreUserData: params => {
+      dispatch(restore(params));
+    },
+  };
 };
 
 export default connect(mapStateProps, mapDispatchToProps)(Main);

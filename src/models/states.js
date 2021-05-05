@@ -7,3 +7,6 @@ export const CLEAR_LOGIN_ACTIONS = [SUCCESS];
 
 export const SIGNUP_ACTIONS = [SUCCESS, FAIL, ERROR];
 export const CLEAR_SIGNUP_ACTIONS = [SUCCESS];
+
+export const SAVE_ACTIONS = [SUCCESS, FAIL, ERROR];
+export const RESTORE_ACTIONS = [SUCCESS, FAIL, ERROR];

@@ -17,6 +17,7 @@ export default function* () {
 function* watchLogin() {
   yield takeLatest(login, performLogin);
 }
+
 function* watchClearLogin() {
   yield takeLatest(clearLogin, performClearLogin);
 }

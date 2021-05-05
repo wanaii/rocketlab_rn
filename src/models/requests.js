@@ -40,3 +40,18 @@ export const loginRequest = async function (payload) {
   });
   return await postRequest('/login', param);
 };
+
+export const saveRequest = async function (payload) {
+  const param = JSON.stringify({
+    username: payload.username,
+    userdata: JSON.stringify(payload.userdata),
+  });
+  return await postRequest('/save', param);
+};
+
+export const restoreRequest = async function (payload) {
+  const param = JSON.stringify({
+    username: payload.username,
+  });
+  return await postRequest('/restore', param);
+};
