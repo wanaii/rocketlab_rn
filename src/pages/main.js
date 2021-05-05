@@ -301,7 +301,7 @@ function Main(props) {
               userdata: eventList,
             });
             props.clearLoginStatus();
-            Alert.alert('Logged Out Successfully !');
+            Alert.alert('Data Saved and User Logged Out Successfully !');
             navigation.replace('LOGIN');
           }}>
           <Feather
@@ -544,7 +544,7 @@ function Main(props) {
                 setEventList(newEventList);
                 setOnAdd(false);
               } else if (addTitle.length == 0) {
-                Alert.alert('Can not add empty-titled item');
+                Alert.alert('Can not add an empty-titled item');
               } else if (addPriority <= 0 || addPriority >= 10) {
                 Alert.alert(
                   'Not a valid priority value (0-9)',

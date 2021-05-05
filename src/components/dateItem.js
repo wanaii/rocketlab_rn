@@ -56,7 +56,7 @@ export default function DateItem(props) {
             }}>
             <Text
               style={{
-                color: props.onEdit ? '#FF0D0D' : '#000000',
+                color: '#000000',
                 fontSize: props.onEdit ? 15 : 13,
               }}>
               Priority:{' '}
@@ -151,7 +151,7 @@ export default function DateItem(props) {
               marginLeft: 10,
             }}
             onPress={props.onClickDelete}>
-            <AntDesign name={'close'} size={25} color={'#FFFFFF'} />
+            <AntDesign name={'delete'} size={25} color={'#FFFFFF'} />
           </TouchableOpacity>
         </View>
       )}
