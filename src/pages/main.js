@@ -64,9 +64,17 @@ function Main(props) {
   const resortEvents = useCallback(
     opt => {
       if (opt === 'A-Z') {
-        setEventList(eventList.sort((a, b) => (a.title > b.title ? 1 : -1)));
+        setEventList(
+          eventList.sort((a, b) =>
+            a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1,
+          ),
+        );
       } else if (opt === 'Z-A') {
-        setEventList(eventList.sort((a, b) => (a.title < b.title ? 1 : -1)));
+        setEventList(
+          eventList.sort((a, b) =>
+            a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1,
+          ),
+        );
       } else if (opt === 'Priority Up') {
         setEventList(eventList.sort((a, b) => a.priority - b.priority));
       } else if (opt === 'Priority Down') {
@@ -579,7 +587,7 @@ function Main(props) {
                   });
                 setEventList(newEventList);
                 setOnAdd(false);
-              } else if (addTitle.length == 0) {
+              } else if (addTitle.length === 0) {
                 Alert.alert('Can not add an empty-titled item');
               } else if (addPriority < 0 || addPriority >= 10) {
                 Alert.alert(
