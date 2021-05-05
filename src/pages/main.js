@@ -75,9 +75,9 @@ function Main(props) {
             a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1,
           ),
         );
-      } else if (opt === 'Priority Up') {
+      } else if (opt === 'Priority Min') {
         setEventList(eventList.sort((a, b) => a.priority - b.priority));
-      } else if (opt === 'Priority Down') {
+      } else if (opt === 'Priority Max') {
         setEventList(eventList.sort((a, b) => b.priority - a.priority));
       }
     },
@@ -287,6 +287,12 @@ function Main(props) {
           onPress={() => {
             setOnEdit(!onEdit);
             setSortPolicy('Sorted By');
+            if (onEdit) {
+              props.saveUserData({
+                username: props.username,
+                userdata: eventList,
+              });
+            }
           }}>
           <AntDesign
             name={'edit'}
@@ -389,8 +395,8 @@ function Main(props) {
             }}>
             <TouchableOpacity
               onPress={() => {
-                setSortPolicy('Priority Up');
-                resortEvents('Priority Up');
+                setSortPolicy('Priority Min');
+                resortEvents('Priority Min');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -404,13 +410,13 @@ function Main(props) {
                   borderTopWidth: 1,
                   borderColor: '#00000060',
                 }}>
-                Priority Up
+                Priority Min
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setSortPolicy('Priority Down');
-                resortEvents('Priority Down');
+                setSortPolicy('Priority Max');
+                resortEvents('Priority Max');
                 setOpenSortOpt(false);
               }}>
               <Text
@@ -424,7 +430,7 @@ function Main(props) {
                   borderTopWidth: 1,
                   borderColor: '#00000060',
                 }}>
-                Priority Down
+                Priority Max
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -586,6 +592,10 @@ function Main(props) {
                     newEventList.push(item);
                   });
                 setEventList(newEventList);
+                props.saveUserData({
+                  username: props.username,
+                  userdata: eventList,
+                });
                 setOnAdd(false);
               } else if (addTitle.length === 0) {
                 Alert.alert('Can not add an empty-titled item');

@@ -127,7 +127,7 @@ export default function DateItem(props) {
           {!props.completed && (
             <TouchableOpacity
               style={{
-                backgroundColor: '#69B34C',
+                backgroundColor: '#2CFA1F',
                 height: 40,
                 width: 40,
                 borderRadius: 10,
