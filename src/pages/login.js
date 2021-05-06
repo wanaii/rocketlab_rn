@@ -18,10 +18,12 @@ function Login(props) {
 
   const navigation = useNavigation();
 
+  // changing the text for login button, regarding whether the user input sth in the username field
   useEffect(() => {
     setLoginText(username === '' ? 'SIGN ME UP' : 'LOGIN');
   }, [username]);
 
+  // showing up messagebox which denotes the logging in status for the current user, by examining store value changed by network request
   useEffect(() => {
     if (props.isLoggedIn === false) {
       Alert.alert('User Login Failed', 'Please Try Again or Register');

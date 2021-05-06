@@ -8,10 +8,12 @@ export default function DateItem(props) {
   const [deadline, setDeadline] = useState(props.deadline);
   const [openDateTimePicker, setOpenDateTimePicker] = useState(false);
 
+  // update priority value if it externally changed
   useEffect(() => {
     setPriority(props.priority);
   }, [props.priority]);
 
+  // update deadline value if it externally changed
   useEffect(() => {
     setDeadline(props.deadline);
   }, [props.deadline]);

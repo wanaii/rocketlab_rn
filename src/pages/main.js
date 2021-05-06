@@ -34,19 +34,21 @@ function Main(props) {
   const [addDDL, setAddDDL] = useState(new Date().getTime());
   const [openAddDateTimePicker, setOpenAddDateTimePicker] = useState(false);
 
-  // testing data
   const [eventList, setEventList] = useState([]);
 
+  // requesting on remote user data that saved previously, once the username given while successfully logged in
   useEffect(() => {
     props.restoreUserData({
       username: props.username,
     });
   }, [props.username]);
 
+  // fetching the user previously saved data from store
   useEffect(() => {
     setEventList(props.userdata);
   }, [props.userdata]);
 
+  // update the counters for total events number and completed events number
   useEffect(() => {
     setTotal(eventList.length);
     let tempComplete = 0;
@@ -59,6 +61,7 @@ function Main(props) {
     setComplete(tempComplete);
   }, [eventList]);
 
+  // re-sorting on the assigned sorting method for the event list
   const resortEvents = useCallback(
     opt => {
       if (opt === 'A-Z') {
@@ -84,6 +87,7 @@ function Main(props) {
 
   return (
     <View style={styles.pageBackground}>
+      {/*page head ribbon for sorting and info display*/}
       <View style={styles.headRibbon}>
         <TouchableOpacity
           style={styles.sortButtonContainer}
@@ -97,6 +101,7 @@ function Main(props) {
         </Text>
         <Text style={styles.statisticText}>completed: {complete}</Text>
       </View>
+      {/*page head indicators for types of events will show*/}
       <View style={styles.colorIndicatorContainer}>
         <Text style={[styles.colorIndicator, {backgroundColor: '#2CFA1F'}]}>
           Completed
@@ -108,6 +113,7 @@ function Main(props) {
           On Going
         </Text>
       </View>
+      {/*if there are any data saved for the current user, just render the list of them*/}
       {eventList.length > 0 && (
         <ScrollView style={styles.scrollContainer}>
           {eventList.length > 0 &&
@@ -174,6 +180,7 @@ function Main(props) {
           {eventList.length > 0 && <View style={styles.viewPusherHeight10} />}
         </ScrollView>
       )}
+      {/*if there is nothing saved with the user, showing the indicator for adding new event item*/}
       {eventList.length === 0 && (
         <View style={styles.emptyIndicatorContainer}>
           <View style={styles.flex1} />
@@ -185,6 +192,7 @@ function Main(props) {
           </View>
         </View>
       )}
+      {/*bottom ribbon for three of the operations, edit an existed item, add a item, and logging out*/}
       <View style={styles.bottomRibbonContainer}>
         {/*Edit items*/}
         <TouchableOpacity
@@ -192,6 +200,7 @@ function Main(props) {
           onPress={() => {
             setOnEdit(!onEdit);
             setSortPolicy('Sorted By');
+            // save the changes while exiting the edit mode
             if (onEdit) {
               props.saveUserData({
                 username: props.username,
@@ -204,6 +213,7 @@ function Main(props) {
             size={35}
             color={onEdit ? '#FF0D0D' : '#000000'}
           />
+          {/*text changed while editing*/}
           <Text
             style={[
               styles.bottomRibbonButtonText,
@@ -251,6 +261,7 @@ function Main(props) {
           style={styles.bottomRibbonButtonContainer}
           disabled={onEdit}
           onPress={() => {
+            // save the changes while logging out
             props.saveUserData({
               username: props.username,
               userdata: eventList,
@@ -275,6 +286,7 @@ function Main(props) {
           </Text>
         </TouchableOpacity>
       </View>
+      {/*popup dialog for selecting a sorting method*/}
       <Dialog visible={openSortOpt}>
         <View style={styles.sortDialogContainer}>
           <Text style={styles.sortDialogTitleText}>Select a Sort Type</Text>
@@ -314,6 +326,7 @@ function Main(props) {
           </ScrollView>
         </View>
       </Dialog>
+      {/*popup dialog for adding new event item*/}
       <Dialog visible={onAdd}>
         <View style={styles.AddDialogContainer}>
           <Text style={styles.addDialogTitleText}>Add a New Event</Text>
