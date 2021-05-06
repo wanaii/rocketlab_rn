@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -18,42 +18,20 @@ export default function DateItem(props) {
 
   return (
     <View
-      style={{
-        marginHorizontal: 10,
-        marginTop: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        backgroundColor: '#FFFFFF',
-        borderLeftColor: props.completed
-          ? '#2CFA1F'
-          : new Date().getTime() > deadline && !props.completed
-          ? '#FFCC00'
-          : '#E13026',
-        borderLeftWidth: 10,
-        borderRadius: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
-      <View
-        style={{
-          flex: 1,
-          width: '60%',
-        }}>
-        {props.title && (
-          <Text
-            style={{
-              color: '#000000',
-              fontSize: 18,
-            }}>
-            {props.title}
-          </Text>
-        )}
+      style={[
+        styles.itemContainer,
+        {
+          borderLeftColor: props.completed
+            ? '#2CFA1F'
+            : new Date().getTime() > deadline && !props.completed
+            ? '#FFCC00'
+            : '#E13026',
+        },
+      ]}>
+      <View style={styles.itemInfoContainer}>
+        {props.title && <Text style={styles.itemTitleText}>{props.title}</Text>}
         {props.priority !== undefined && (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
+          <View style={styles.rowCenterContainer}>
             <Text
               style={{
                 color: '#000000',
@@ -119,37 +97,28 @@ export default function DateItem(props) {
       </View>
 
       {props.onEdit && (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+        <View style={styles.rowCenterContainer}>
           {!props.completed && (
             <TouchableOpacity
-              style={{
-                backgroundColor: '#2CFA1F',
-                height: 40,
-                width: 40,
-                borderRadius: 10,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              style={[
+                {
+                  backgroundColor: '#2CFA1F',
+                },
+                styles.editButtonContainer,
+              ]}
               onPress={props.onClickComplete}>
               <AntDesign name={'check'} size={25} color={'#FFFFFF'} />
             </TouchableOpacity>
           )}
 
           <TouchableOpacity
-            style={{
-              backgroundColor: '#FF0D0D',
-              height: 40,
-              width: 40,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 10,
-              marginLeft: 10,
-            }}
+            style={[
+              {
+                backgroundColor: '#FF0D0D',
+                marginLeft: 10,
+              },
+              styles.editButtonContainer,
+            ]}
             onPress={props.onClickDelete}>
             <AntDesign name={'delete'} size={25} color={'#FFFFFF'} />
           </TouchableOpacity>
@@ -171,3 +140,39 @@ export default function DateItem(props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    marginHorizontal: 10,
+    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+    borderLeftWidth: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemInfoContainer: {
+    flex: 1,
+    width: '60%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  itemTitleText: {
+    color: '#000000',
+    fontSize: 18,
+  },
+  rowCenterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editButtonContainer: {
+    height: 40,
+    width: 40,
+    borderRadius: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
