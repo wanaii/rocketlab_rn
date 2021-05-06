@@ -42,6 +42,9 @@ const App: () => Node = () => {
 };
 
 const mapStateProps = state => {
+  console.log('++++++++++++++++++++++++');
+  console.log(state);
+  console.log('++++++++++++++++++++++++');
   return {};
 };
 

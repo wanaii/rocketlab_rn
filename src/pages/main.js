@@ -184,7 +184,7 @@ function Main(props) {
                   deadline={item.deadline}
                   onEdit={onEdit}
                   onClickComplete={() => {
-                    Alert.alert('Completed');
+                    Alert.alert('Event set as completed !');
                     let newEventList = [];
                     eventList.length > 0 &&
                       eventList.forEach((item, subIndex) => {
@@ -197,7 +197,7 @@ function Main(props) {
                     setEventList(newEventList);
                   }}
                   onClickDelete={() => {
-                    Alert.alert('Deleted');
+                    Alert.alert('Event deleted !');
                     let newEventList = [];
                     eventList.length > 0 &&
                       eventList.forEach((item, subIndex) => {
@@ -351,7 +351,7 @@ function Main(props) {
               userdata: eventList,
             });
             props.clearLoginStatus();
-            Alert.alert('Data Saved and User Logged Out Successfully !');
+            Alert.alert('Data saved and user logged out successfully !');
             navigation.replace('LOGIN');
           }}>
           <Feather
